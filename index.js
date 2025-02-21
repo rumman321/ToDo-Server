@@ -27,6 +27,7 @@ async function run() {
 
     const database = client.db("TODO");
     const userCollection = database.collection("users");
+    const taskCollection = database.collection("Tasks");
 
 
     app.post('/users', async(req,res)=>{
@@ -38,6 +39,11 @@ async function run() {
           return res.send({ message: "user already exist", insertedId: null });
         }
         const result = await userCollection.insertOne(user)
+        res.send(result)
+    })
+    app.post('/tasks',async(req,res)=>{
+        const data = req.body
+        const result = await taskCollection.insertOne(data)
         res.send(result)
     })
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
