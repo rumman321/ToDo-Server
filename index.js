@@ -31,7 +31,7 @@ async function run() {
 
     app.post("/users", async (req, res) => {
       const user = req.body;
-      console.log(user);
+    //   console.log('user here',user);
       const query = { email: user.email };
       const existingUser = await userCollection.findOne(query);
       if (existingUser) {
@@ -46,7 +46,11 @@ async function run() {
       res.send(result);
     });
     app.get("/tasks", async (req, res) => {
-      const result = await taskCollection.find().toArray();
+      const {email}= req.headers
+      console.log(email);
+      const query ={email:email}
+    //   console.log(query);
+      const result = await taskCollection.find(query).toArray();
       res.send(result);
     });
     app.delete("/tasks/:id", async (req, res) => {
@@ -55,12 +59,13 @@ async function run() {
       const result = await taskCollection.deleteOne(query);
       res.send(result);
     });
-    app.patch("/tasks/:id ", async (req, res) => {
+    app.patch("/tasks/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id);
+      
       const filter = { _id: new ObjectId(id) };
       const task = req.body;
-      console.log(task);
+      const {title,message,Category}= task
+    //   console.log(task);
       const updatedTask = {
         $set: {
           title: task.title,
